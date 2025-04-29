@@ -18,16 +18,29 @@ export default function Home() {
   const clickHandler = (x: number, y: number) => {
     console.log(x, y);
     const newBoard = structuredClone(board);
-    if (board[y + 1] !== undefined && board[y + 1][x] === 3 - turnColor) {
+    const dirs = [
+      { dx: 0, dy: 1 },
+      { dx: 1, dy: 1 },
+      { dx: 1, dy: 0 },
+      { dx: 1, dy: -1 },
+      { dx: 0, dy: -1 },
+      { dx: -1, dy: -1 },
+      { dx: -1, dy: 0 },
+      { dx: -1, dy: 1 },
+    ];
+
+    const opponent = 3 - turnColor;
+    let totalFlips: { x: number; y: number };
+    if (board[y + 1][x] !== undefined && board[y + 1][x] === 3 - turnColor) {
       newBoard[y][x] = turnColor;
       setTurnColor(3 - turnColor);
-    } else if (board[x + 1] !== undefined && board[y][x + 1] === 3 - turnColor) {
+    } else if (board[y - 1][x] !== undefined && board[y - 1][x] === 3 - turnColor) {
       newBoard[y][x] = turnColor;
       setTurnColor(3 - turnColor);
-    } else if (board[y - 1] !== undefined && board[y - 1][x] === 3 - turnColor) {
+    } else if (board[y][x + 1] !== undefined && board[y][x + 1] === 3 - turnColor) {
       newBoard[y][x] = turnColor;
       setTurnColor(3 - turnColor);
-    } else if (board[x - 1] !== undefined && board[y][x - 1] === 3 - turnColor) {
+    } else if (board[y][x - 1] !== undefined && board[y][x - 1] === 3 - turnColor) {
       newBoard[y][x] = turnColor;
       setTurnColor(3 - turnColor);
     }
