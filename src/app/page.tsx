@@ -121,6 +121,41 @@ export default function Home() {
     }
 
     setBoard(newBoard);
+
+    if (board[y][x] !== 0) return;
+
+    const newBoard = structuredClone(board);
+
+    const dirs = [
+      [0, 1],
+      [1, 1],
+      [1, 0],
+      [1, -1],
+      [0, -1],
+      [-1, -1],
+      [-1, 0],
+      [-1, 1],
+    ] as const;
+
+    //ひっくり返すセルを集める
+    const toFlip: {x: number, y: number}[] = [];
+    const my = turnColor;
+    const opp = 3 - turnColor;
+
+    for (const [dx, dy] of dirs){
+      let nx = x + dx;
+      let ny = y + dy;
+      const line: {x: number y: number}[] = [];
+
+      //相手の石が連続する限り進む
+      while (board[ny]?.[nx] === opp) {
+        line.push({x: nx, y: ny});
+        nx += dx;
+        ny += dy;
+      }
+
+      //連続の
+    }
   };
 
   return (
