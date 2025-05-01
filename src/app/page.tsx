@@ -19,6 +19,17 @@ export default function Home() {
     console.log(x, y);
     const newBoard = structuredClone(board);
 
+    const direction = [
+      [0, 1],
+      [1, 1],
+      [1, 0],
+      [1, -1],
+      [0, -1],
+      [-1, -1],
+      [-1, 0],
+      [-1, 1],
+    ];
+
     if (
       board[y][x] === 0 &&
       board[y + 1] !== undefined &&
