@@ -154,8 +154,19 @@ export default function Home() {
         ny += dy;
       }
 
-      //連続の
+      //連続の先に自分の石があれば
+      if(line.length > 0 && board[ny]?.[nx] === my){
+        toFlip.push(...line);
+      }
     }
+    if (toFlip.length === 0) return;
+
+    newBoard[y][x] = my;
+    toFlip.forEach(p => {
+      newBoard[p.y][p.x] = my;
+    });
+    setBoard(newBoard);
+    setTurnColor(opp)
   };
 
   return (
