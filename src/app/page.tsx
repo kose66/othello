@@ -34,45 +34,56 @@ export default function Home() {
         if (b[y][x] !== 0) continue;
 
         for (const [dx, dy] of dirs) {
-          const nx = x + dx;
-          const ny = y + dy;
-          const found = false;
+          let nx = x + dx;
+          let ny = y + dy;
+          let found = false;
+
+          while (b[ny]?.[nx] === opp) {
+            nx += dx;
+            ny += dy;
+            found = true;
+          }
+
+          if (found && b[ny]?.[nx] === color) {
+            return true;
+          }
         }
       }
     }
+    return false;
   };
-  const clickHandler = (x: number, y: number) => {
-    if (board[y][x] !== 0) return;
 
-    console.log(x, y);
-    //直接boardを変更すると問題が起きるから安全にコピー
-    const newBoard = structuredClone(board);
+const clickHandler = (x: number, y: number) => {
+  if (board[y][x] !== 0) return;
 
-    const dirs = [
-      [0, 1],
-      [1, 1],
-      [1, 0],
-      [1, -1],
-      [0, -1],
-      [-1, -1],
-      [-1, 0],
-      [-1, 1],
-    ] as const;
+  console.log(x, y);
+  //直接boardを変更すると問題が起きるから安全にコピー
+  const newBoard = structuredClone(board);
 
-    const my = turnColor;
-    const opp = 3 - turnColor;
-    const toFlip: { x: number; y: number }[] = [];
+  const dirs = [
+    [0, 1],
+    [1, 1],
+    [1, 0],
+    [1, -1],
+    [0, -1],
+    [-1, -1],
+    [-1, 0],
+    [-1, 1],
+  ] as const;
 
-    for (const [dx, dy] of dirs) {
-      let nx = x + dx;
-      let ny = y + dy;
-      const line: { x: number; y: number }[] = [];
+  const my = turnColor;
+  const opp = 3 - turnColor;
+  const toFlip: { x: number; y: number }[] = [];
 
-      while (board[ny]?.[nx] === opp) {
-        line.push({ x: nx, y: ny });
-        nx += dx;
-        ny += dy;
-      }
+  for (const [dx, dy] of dirs) {
+    let nx = x + dx;
+    let ny = y + dy;
+    const line: { x: number; y: number }[] = [];
+
+    while (board[ny]?.[nx] === opp) {
+      line.push({ x: nx, y: ny });
+      nx += dx;
+      ny += dy;
 
       if (line.length > 0 && board[ny]?.[nx] === my) {
         toFlip.push(...line);
@@ -88,7 +99,7 @@ export default function Home() {
 
     setBoard(newBoard);
     setTurnColor(opp);
-  };
+  }
 
   return (
     <div className={styles.container}>
