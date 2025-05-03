@@ -28,6 +28,18 @@ export default function Home() {
       [-1, 1],
     ] as const;
     const opp = 3 - color;
+
+    for (let y = 0; y < 8; y++) {
+      for (let x = 0; x < 8; x++) {
+        if (b[y][x] !== 0) continue;
+
+        for (const [dx, dy] of dirs) {
+          const nx = x + dx;
+          const ny = y + dy;
+          const found = false;
+        }
+      }
+    }
   };
   const clickHandler = (x: number, y: number) => {
     if (board[y][x] !== 0) return;
