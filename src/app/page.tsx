@@ -15,10 +15,25 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
+
+  const hasValidMove = (b: number[][], color: number): boolean => {
+    const dirs = [
+      [0, 1],
+      [1, 1],
+      [1, 0],
+      [1, -1],
+      [0, -1],
+      [-1, -1],
+      [-1, 0],
+      [-1, 1],
+    ] as const;
+    const opp = 3 - color;
+  };
   const clickHandler = (x: number, y: number) => {
     if (board[y][x] !== 0) return;
 
     console.log(x, y);
+    //直接boardを変更すると問題が起きるから安全にコピー
     const newBoard = structuredClone(board);
 
     const dirs = [
