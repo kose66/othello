@@ -27,6 +27,19 @@ export default function Home() {
       [-1, 0],
       [-1, 1],
     ] as const;
+
+    const countStone = (b: number[][]) => {
+      let black = 0;
+      let white = 0;
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          if (b[y][x] === 1) black++;
+          if (b[y][x] === 2) white++;
+        }
+      }
+      return { black, white };
+    };
+
     const opp = 3 - color;
 
     for (let y = 0; y < 8; y++) {
