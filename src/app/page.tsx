@@ -53,37 +53,37 @@ export default function Home() {
     return false;
   };
 
-const clickHandler = (x: number, y: number) => {
-  if (board[y][x] !== 0) return;
+  const clickHandler = (x: number, y: number) => {
+    if (board[y][x] !== 0) return;
 
-  console.log(x, y);
-  //直接boardを変更すると問題が起きるから安全にコピー
-  const newBoard = structuredClone(board);
+    console.log(x, y);
+    //直接boardを変更すると問題が起きるから安全にコピー
+    const newBoard = structuredClone(board);
+    const dirs = [
+      [0, 1],
+      [1, 1],
+      [1, 0],
+      [1, -1],
+      [0, -1],
+      [-1, -1],
+      [-1, 0],
+      [-1, 1],
+    ] as const;
 
-  const dirs = [
-    [0, 1],
-    [1, 1],
-    [1, 0],
-    [1, -1],
-    [0, -1],
-    [-1, -1],
-    [-1, 0],
-    [-1, 1],
-  ] as const;
+    const my = turnColor;
+    const opp = 3 - turnColor;
+    const toFlip: { x: number; y: number }[] = [];
 
-  const my = turnColor;
-  const opp = 3 - turnColor;
-  const toFlip: { x: number; y: number }[] = [];
+    for (const [dx, dy] of dirs) {
+      let nx = x + dx;
+      let ny = y + dy;
+      const line: { x: number; y: number }[] = [];
 
-  for (const [dx, dy] of dirs) {
-    let nx = x + dx;
-    let ny = y + dy;
-    const line: { x: number; y: number }[] = [];
-
-    while (board[ny]?.[nx] === opp) {
-      line.push({ x: nx, y: ny });
-      nx += dx;
-      ny += dy;
+      while (board[ny]?.[nx] === opp) {
+        line.push({ x: nx, y: ny });
+        nx += dx;
+        ny += dy;
+      }
 
       if (line.length > 0 && board[ny]?.[nx] === my) {
         toFlip.push(...line);
@@ -98,8 +98,16 @@ const clickHandler = (x: number, y: number) => {
     });
 
     setBoard(newBoard);
-    setTurnColor(opp);
-  }
+
+    if (hasValidMove(newBoard, opp)) {
+      setTurnColor(opp);
+    } else if (hasValidMove(newBoard, my)) {
+      alert('あなたの番です。');
+      setTurnColor(my);
+    } else {
+      alert('両者置けません。ゲーム終了');
+    }
+  };
 
   return (
     <div className={styles.container}>
