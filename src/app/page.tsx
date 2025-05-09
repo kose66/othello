@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 
+//再帰関数
 const calcrateWhitePoint = (board: number[][]) => {
   let count = 0;
   for (let y = 0; y < 8; y++) {
@@ -39,55 +40,64 @@ export default function Home() {
     [0, 0, 0, 0, 0, 0, 0, 0],
   ]);
 
-  const hasValidMove = (b: number[][], color: number): boolean => {
-    const dirs = [
-      [0, 1],
-      [1, 1],
-      [1, 0],
-      [1, -1],
-      [0, -1],
-      [-1, -1],
-      [-1, 0],
-      [-1, 1],
-    ];
+  type Position = { x: number; y: number };
 
-    // const countStone = (b: number[][]) => {
-    //   let black = 0;
-    //   let white = 0;
-    //   for (let y = 0; y < 8; y++) {
-    //     for (let x = 0; x < 8; x++) {
-    //       if (b[y][x] === 1) black++;
-    //       if (b[y][x] === 2) white++;
-    //     }
-    //   }
-    //   return { black, white };
-    // };
+  function legalMoves(board: number[][], player: number): Position[] {
+    const opp = player === 1 ? 2 : 1;
 
-    const opp = 3 - color;
+    //const hasValidMove = (b: number[][], color: number): boolean => {
+      const dirs = [
+        [0, 1],
+        [1, 1],
+        [1, 0],
+        [1, -1],
+        [0, -1],
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+      ];
 
-    for (let y = 0; y < 8; y++) {
-      for (let x = 0; x < 8; x++) {
-        if (b[y][x] !== 0) continue;
+      // const countStone = (b: number[][]) => {
+      //   let black = 0;
+      //   let white = 0;
+      //   for (let y = 0; y < 8; y++) {
+      //     for (let x = 0; x < 8; x++) {
+      //       if (b[y][x] === 1) black++;
+      //       if (b[y][x] === 2) white++;
+      //     }
+      //   }
+      //   return { black, white };
+      // };
 
-        for (const [dx, dy] of dirs) {
-          let nx = x + dx;
-          let ny = y + dy;
-          let found = false;
+      const legalMoves: Position[] = [];
+      const opp = 3 - color;
+      //8*8
+      for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+          if (board[y][x] !== 0) continue; //0じゃないとスキップ
+          //for ofはpythonのfor in イメージ
+          for (const [dx, dy] of dirs) {
+            let nx = x + dx;
+            let ny = y + dy;
+            let found = false;
 
-          while (b[ny]?.[nx] === opp) {
-            nx += dx;
-            ny += dy;
-            found = true;
-          }
+            while (board[ny]?.[nx] === opp) {
+              nx += dx;
+              ny += dy;
+              found = true;
+            }
 
-          if (found && b[ny]?.[nx] === color) {
-            return true;
+            if (found && board[ny]?.[nx] === color) {
+              legalMoves.push({ x, y });
+            }
           }
         }
       }
-    }
-    return false;
-  };
+
+      return legalMoves;
+    };
+
+  }
 
   const clickHandler = (x: number, y: number) => {
     if (board[y][x] !== 0) return;
@@ -104,7 +114,7 @@ export default function Home() {
       [-1, -1],
       [-1, 0],
       [-1, 1],
-    ] as const;
+    ];
 
     const my = turnColor;
     const opp = 3 - turnColor;
@@ -159,6 +169,7 @@ export default function Home() {
                   style={{ background: color === 1 ? '#000' : '#fff' }}
                 />
               )}
+              {isHint && <div className={styles.hint} />}
             </div>
           )),
         )}
