@@ -3,6 +3,29 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 
+const calcrateWhitePoint = (board: number[][]) => {
+  let count = 0;
+  for (let y = 0; y < 8; y++) {
+    for (let x = 0; x < 8; x++) {
+      if (board[y][x] === 2) {
+        count = count + 1;
+      }
+    }
+  }
+  return count;
+};
+const calcrateBlackPoint = (board: number[][]) => {
+  let count = 0;
+  for (let y = 0; y < 8; y++) {
+    for (let x = 0; x < 8; x++) {
+      if (board[y][x] === 1) {
+        count = count + 1;
+      }
+    }
+  }
+  return count;
+};
+
 export default function Home() {
   const [turnColor, setTurnColor] = useState(1);
   const [board, setBoard] = useState([
@@ -26,19 +49,19 @@ export default function Home() {
       [-1, -1],
       [-1, 0],
       [-1, 1],
-    ] as const;
+    ];
 
-    const countStone = (b: number[][]) => {
-      let black = 0;
-      let white = 0;
-      for (let y = 0; y < 8; y++) {
-        for (let x = 0; x < 8; x++) {
-          if (b[y][x] === 1) black++;
-          if (b[y][x] === 2) white++;
-        }
-      }
-      return { black, white };
-    };
+    // const countStone = (b: number[][]) => {
+    //   let black = 0;
+    //   let white = 0;
+    //   for (let y = 0; y < 8; y++) {
+    //     for (let x = 0; x < 8; x++) {
+    //       if (b[y][x] === 1) black++;
+    //       if (b[y][x] === 2) white++;
+    //     }
+    //   }
+    //   return { black, white };
+    // };
 
     const opp = 3 - color;
 
@@ -124,6 +147,8 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
+      <div>{calcrateBlackPoint(board)}</div>
+      <div>{calcrateWhitePoint(board)}</div>
       <div className={styles.board}>
         {board.map((row, y) =>
           row.map((color, x) => (
